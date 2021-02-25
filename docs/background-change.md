@@ -2,6 +2,10 @@
 
 ## Video
 
+## Code
+
+[Code](https://github.com/phptuts/changebackgroundchromeextension)
+
 ## Icon Down
 
 [Icons Zip](https://github.com/phptuts/changebackgroundchromeextension/raw/master/icons.zip)

@@ -1,0 +1,10 @@
+site_name: Chrome Extension
+nav:
+  - Home: index.md
+  - Background Change Extension: background-change.md
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages: ["css", "javascript", "html"]
+extra_css:
+  - css/style.css

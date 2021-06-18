@@ -6,7 +6,7 @@
 
 ## Code
 
-[Code](https://github.com/phptuts/changebackgroundchromeextension)
+[Code](https://github.com/phptuts/chrome-extenison-10-minute)
 
 ## Icon Down
 
@@ -29,7 +29,7 @@
     "default_icon": "icon16.png",
     "default_popup": "popup.html"
   },
-  "permissions": ["activeTab"]
+  "permissions": ["scripting", "tabs", "activeTab"]
 }
 ```
 
@@ -39,6 +39,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
     <style>
       body {
         width: 200px;
@@ -65,7 +69,6 @@
 
     <h2>Rotate 3D</h2>
     <input type="range" min="0" max="360" step="1" value="0" id="rotate3d" />
-
     <script src="popup.js"></script>
   </body>
 </html>
@@ -80,24 +83,31 @@ const rotateEl = document.getElementById("rotate");
 
 const rotate3DEl = document.getElementById("rotate3d");
 
-colorEl.addEventListener("input", (e) => {
-  const hexValue = e.target.value;
-  chrome.tabs.executeScript(null, {
-    code: `document.body.style.backgroundColor='${hexValue}'`,
-  });
+colorEl.addEventListener("input", () => {
+  injectCSS(`body {
+        background-color: ${colorEl.value}!important;
+    }`);
 });
 
-rotateEl.addEventListener("input", (e) => {
-  const degree = e.target.value;
-  chrome.tabs.executeScript(null, {
-    code: `document.body.style.transform='rotate(${degree}deg)'`,
-  });
+rotateEl.addEventListener("input", () => {
+  injectCSS(`body {
+          transform: rotate(${rotateEl.value}deg)!important;
+      }`);
 });
 
-rotate3DEl.addEventListener("input", (e) => {
-  const degree = e.target.value;
-  chrome.tabs.executeScript(null, {
-    code: `document.body.style.transform='rotate3d(1, 1, 1,${degree}deg)'`,
-  });
+rotate3DEl.addEventListener("input", () => {
+  injectCSS(`body {
+            transform: rotate3d(1,1,1,${rotate3DEl.value}deg)!important;
+        }`);
 });
+
+function injectCSS(css) {
+  chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+    if (!tab) return;
+    chrome.scripting.insertCSS({
+      css,
+      target: { tabId: tab.id },
+    });
+  });
+}
 ```
